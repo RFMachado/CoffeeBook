@@ -1,22 +1,49 @@
 package com.rfm.coffeebook.main.ui.screens
 
-import com.rfm.coffeebook.main.data.CoffeeRecipe
-import com.rfm.coffeebook.main.viewmodel.CoffeeRecipeViewModel
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.rfm.coffeebook.CoffeeBookApplication
+import com.rfm.coffeebook.main.data.CoffeeRecipe
+import com.rfm.coffeebook.main.viewmodel.CoffeeRecipeViewModel
 import com.rfm.coffeebook.main.viewmodel.CoffeeRecipeViewModelFactory
 import com.rfm.coffeebook.ui.theme.CoffeeAccent
+import com.rfm.coffeebook.ui.theme.CoffeeLight
+import com.rfm.coffeebook.ui.theme.CoffeeMedium
+import com.rfm.coffeebook.ui.theme.TextLight
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddRecipeScreen(
     onBack: () -> Unit
@@ -30,6 +57,7 @@ fun AddRecipeScreen(
         )
     )
 
+    // 📝 Estados dos campos
     var name by remember { mutableStateOf("") }
     var method by remember { mutableStateOf("") }
     var water by remember { mutableStateOf("") }
@@ -37,89 +65,101 @@ fun AddRecipeScreen(
     var grind by remember { mutableStateOf("") }
     var time by remember { mutableStateOf("") }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-
-        Text("Nova receita", style = MaterialTheme.typography.headlineSmall)
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-
-        OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text("Nome da receita") },
-            modifier = Modifier.fillMaxWidth(),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = CoffeeAccent,
-                focusedLabelColor = CoffeeAccent
-            )
-        )
-
-        OutlinedTextField(
-            value = method,
-            onValueChange = { method = it },
-            label = { Text("Método (V60, Prensa...)") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        OutlinedTextField(
-            value = water,
-            onValueChange = { water = it },
-            label = { Text("Água (ml)") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        OutlinedTextField(
-            value = coffee,
-            onValueChange = { coffee = it },
-            label = { Text("Café (g)") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        OutlinedTextField(
-            value = grind,
-            onValueChange = { grind = it },
-            label = { Text("Moagem") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        OutlinedTextField(
-            value = time,
-            onValueChange = { time = it },
-            label = { Text("Tempo de preparo") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(
-            onClick = { viewModel.addRecipe(
-                CoffeeRecipe(
-                    name = name,
-                    method = method,
-                    waterMl = water.toIntOrNull() ?: 0,
-                    coffeeGrams = coffee.toIntOrNull() ?: 0,
-                    grind = grind,
-                    brewTime = time,
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        "Nova Receita",
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = "Voltar"
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = CoffeeMedium,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                    navigationIconContentColor = TextLight
                 )
             )
-                onBack()
-            },
+        },
+        containerColor = CoffeeLight
+    ) { padding ->
+
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            shape = RoundedCornerShape(28.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = CoffeeAccent
-            )
+                .fillMaxSize()
+                .background(CoffeeLight)
+                .padding(padding)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
-            Text("Salvar Receita", fontSize = 16.sp)
+
+            AddField("Nome da receita", name) { name = it }
+            AddField("Método", method) { method = it }
+            AddField("Água (ml)", water) { water = it }
+            AddField("Café (g)", coffee) { coffee = it }
+            AddField("Moagem", grind) { grind = it }
+            AddField("Tempo de preparo", time) { time = it }
+
+            Spacer(Modifier.height(24.dp))
+
+            Button(
+                onClick = {
+                    viewModel.addRecipe(
+                        CoffeeRecipe(
+                            name = name,
+                            method = method,
+                            waterMl = water.toIntOrNull() ?: 0,
+                            coffeeGrams = coffee.toIntOrNull() ?: 0,
+                            grind = grind,
+                            brewTime = time
+                        )
+                    )
+                    onBack()
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(28.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = CoffeeAccent
+                )
+            ) {
+                Text(
+                    "Salvar Receita",
+                    fontSize = MaterialTheme.typography.bodyLarge.fontSize
+                )
+            }
         }
     }
 }
+
+@Composable
+private fun AddField(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(label) },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = CoffeeAccent,
+            focusedLabelColor = CoffeeAccent,
+            cursorColor = CoffeeAccent
+        )
+    )
+}
+
+

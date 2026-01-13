@@ -38,9 +38,12 @@ import com.rfm.coffeebook.CoffeeBookApplication
 import com.rfm.coffeebook.main.data.CoffeeRecipe
 import com.rfm.coffeebook.main.viewmodel.CoffeeRecipeViewModel
 import com.rfm.coffeebook.main.viewmodel.CoffeeRecipeViewModelFactory
+import com.rfm.coffeebook.ui.theme.BackgroundAddRecipe
+import com.rfm.coffeebook.ui.theme.BackgroundOutLine
 import com.rfm.coffeebook.ui.theme.CoffeeAccent
 import com.rfm.coffeebook.ui.theme.CoffeeLight
 import com.rfm.coffeebook.ui.theme.CoffeeMedium
+import com.rfm.coffeebook.ui.theme.TextDark
 import com.rfm.coffeebook.ui.theme.TextLight
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -95,8 +98,7 @@ fun AddRecipeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(CoffeeLight)
-                .padding(padding)
+                .background(BackgroundAddRecipe)
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
@@ -155,8 +157,14 @@ private fun AddField(
             .fillMaxWidth()
             .padding(vertical = 6.dp),
         colors = OutlinedTextFieldDefaults.colors(
+            focusedContainerColor = BackgroundOutLine,    // 👈 fundo quando focado
+            unfocusedContainerColor = BackgroundOutLine,  // 👈 fundo sem foco
+            focusedTextColor = TextDark,       // 👈 texto digitado (focado)
+            unfocusedTextColor = TextDark,
+            unfocusedLabelColor = CoffeeMedium,   // 👈 cor do hint
+            focusedLabelColor = CoffeeAccent, // quando focado
+            unfocusedBorderColor = CoffeeMedium,
             focusedBorderColor = CoffeeAccent,
-            focusedLabelColor = CoffeeAccent,
             cursorColor = CoffeeAccent
         )
     )

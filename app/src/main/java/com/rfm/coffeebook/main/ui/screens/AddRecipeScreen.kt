@@ -45,6 +45,7 @@ import com.rfm.coffeebook.ui.theme.CoffeeLight
 import com.rfm.coffeebook.ui.theme.CoffeeMedium
 import com.rfm.coffeebook.ui.theme.TextDark
 import com.rfm.coffeebook.ui.theme.TextLight
+import com.rfm.coffeebook.ui.theme.TextTitleLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,14 +75,16 @@ fun AddRecipeScreen(
                 title = {
                     Text(
                         "Nova Receita",
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = TextTitleLight
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
                             Icons.Default.ArrowBack,
-                            contentDescription = "Voltar"
+                            contentDescription = "Voltar",
+                            tint = TextTitleLight
                         )
                     }
                 },

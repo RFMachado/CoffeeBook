@@ -116,7 +116,6 @@ fun AddRecipeScreen(
                 onClick = {
                     viewModel.addRecipe(
                         CoffeeRecipe(
-                            name = name,
                             method = method,
                             waterMl = water.toIntOrNull() ?: 0,
                             coffeeGrams = coffee.toIntOrNull() ?: 0,

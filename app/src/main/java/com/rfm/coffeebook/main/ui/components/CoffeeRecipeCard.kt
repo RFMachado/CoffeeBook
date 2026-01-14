@@ -12,30 +12,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rfm.coffeebook.main.data.CoffeeRecipe
+import com.rfm.coffeebook.ui.theme.CoffeeBookTheme
 import com.rfm.coffeebook.ui.theme.CoffeeCard
 import com.rfm.coffeebook.ui.theme.TextLight
 
 @Composable
 fun CoffeeRecipeCard(recipe: CoffeeRecipe) {
-//    Card(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(8.dp),
-//        elevation = CardDefaults.cardElevation(2.dp)
-//    ) {
-//        Column(modifier = Modifier.padding(12.dp)) {
-//            Text(recipe.name, fontWeight = FontWeight.Bold)
-//            Text("Método: ${recipe.method}")
-//            Text("Água: ${recipe.waterMl} ml")
-//            Text("Café: ${recipe.coffeeGrams} g")
-//            Text("Moagem: ${recipe.grind}")
-//            Text("Tempo: ${recipe.brewTime}")
-//        }
-//    }
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,18 +35,35 @@ fun CoffeeRecipeCard(recipe: CoffeeRecipe) {
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                recipe.name,
+                text = recipe.method,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = TextLight
             )
-
             Spacer(Modifier.height(8.dp))
 
-            Text("Método: ${recipe.method}")
             Text("Água: ${recipe.waterMl} ml • Café: ${recipe.coffeeGrams} g")
             Text("Moagem: ${recipe.grind}")
             Text("Tempo: ${recipe.brewTime}")
         }
+    }
+}
+
+private val previewRecipe = CoffeeRecipe(
+    id = 1,
+    method = "V60 Clássico",
+    waterMl = 300,
+    coffeeGrams = 20,
+    grind = "Média",
+    brewTime = "2:30"
+)
+
+@Preview(showBackground = true)
+@Composable
+fun CoffeeRecipeCardPreview() {
+    CoffeeBookTheme {
+        CoffeeRecipeCard(
+            recipe = previewRecipe
+        )
     }
 }

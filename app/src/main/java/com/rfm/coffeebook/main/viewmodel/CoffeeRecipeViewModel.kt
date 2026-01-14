@@ -24,4 +24,10 @@ class CoffeeRecipeViewModel(
             dao.insert(recipe)
         }
     }
+
+    fun deleteRecipe(recipe: CoffeeRecipe) {
+        viewModelScope.launch {
+            dao.delete(recipe)
+        }
+    }
 }
